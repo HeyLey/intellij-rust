@@ -1,7 +1,9 @@
 package org.rust.lang.core.types
 
 import com.intellij.openapi.project.Project
-import org.rust.lang.core.psi.*
+import org.rust.lang.core.psi.RustFnElement
+import org.rust.lang.core.psi.RustTraitItemElement
+import org.rust.lang.core.psi.RustTypeParamElement
 import org.rust.lang.core.psi.util.trait
 import org.rust.lang.core.types.util.bounds
 import org.rust.lang.core.types.visitors.RustTypeVisitor
@@ -18,4 +20,5 @@ class RustTypeParameterType(val parameter: RustTypeParamElement) : RustTypeBase(
     override fun getNonStaticMethodsIn(project: Project): Sequence<RustFnElement> =
         getTraitsImplementedIn(project).flatMap { it.traitMethodMemberList.asSequence() }
 
+    override fun substitute(map: Map<RustTypeParameterType, RustType>): RustType = map[this] ?: this
 }

@@ -25,4 +25,9 @@ interface RustType {
      */
     fun getNonStaticMethodsIn(project: Project): Sequence<RustFnElement>
 
+    fun withTypeParameters(typeParameters: List<RustType>): RustType = this
+
+    fun substitute(map: Map<RustTypeParameterType, RustType>): RustType = this
+
+    val typeParameterMap: Map<RustTypeParameterType, RustType> get() = emptyMap()
 }

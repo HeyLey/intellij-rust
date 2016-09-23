@@ -10,4 +10,9 @@ class RustFunctionType(val paramTypes: List<RustType>, val retType: RustType) : 
         val params = paramTypes.joinToString(", ", "fn(", ")")
         return if (retType === RustUnitType) params else "$params -> $retType"
     }
+
+    override fun substitute(map: Map<RustTypeParameterType, RustType>): RustType = RustFunctionType(
+        paramTypes.map { it.substitute(map) },
+        retType.substitute(map)
+    )
 }
