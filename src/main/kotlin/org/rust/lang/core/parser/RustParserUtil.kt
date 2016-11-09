@@ -9,6 +9,12 @@ import org.rust.lang.core.parser.RustParserDefinition.Companion.OUTER_BLOCK_DOC_
 import org.rust.lang.core.parser.RustParserDefinition.Companion.OUTER_EOL_DOC_COMMENT
 import org.rust.lang.core.psi.RsElementTypes
 import org.rust.lang.core.psi.RsElementTypes.*
+import org.rust.lang.core.psi.RustCompositeElementTypes
+import org.rust.lang.core.psi.RustTokenElementTypes
+import org.rust.lang.core.psi.RustMacrosElementType
+import org.rust.lang.core.psi.RustTokenElementTypes.*
+import org.rust.lang.core.psi.RustTokenType
+
 
 @Suppress("UNUSED_PARAMETER")
 object RustParserUtil : GeneratedParserUtilBase() {
@@ -164,6 +170,18 @@ object RustParserUtil : GeneratedParserUtilBase() {
             return true
         }
         return false
+    }
+
+    @JvmStatic
+    fun parseLazyElementContent(builder: PsiBuilder, level: Int) : Boolean {
+        val mark = builder.mark()
+        val result = RustParser.token_tree(builder, level)
+        if (result) {
+            mark.collapse(RustMacrosElementType.LAZY_ELEMENT_CONTENT)
+        } else {
+            mark.drop()
+        }
+        return result
     }
 
 }

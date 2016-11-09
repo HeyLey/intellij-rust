@@ -921,10 +921,9 @@ private BuildInMacro ::= TryMacro
                        | lazy_element
 
 
-lazy_element ::= "expr" '!' '(' token_tree ')' {
-  // extends = "com.intellij.psi.impl.source.tree.LazyParseablePsiElement"
-   elementTypeFactory = "org.rust.lang.core.psi.RustMacrosElementType.factory"
-}
+lazy_element ::= "expr" '!' '(' lazy_element_content ')' { pin = 2}
+
+lazy_element_content ::= << parseLazyElementContent >>
 
 
 private ZzMacroCall ::= BuildInMacro | ExprLikeMacro { pin(".*") = MacroInvocation }
