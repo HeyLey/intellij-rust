@@ -920,8 +920,8 @@ private BuildInMacro ::= TryMacro
                        | LogMacro
                        | lazy_element
 
+lazy_element ::= macro_invocation '(' lazy_element_content ')' | macro_invocation '{' lazy_element_content '}' { pin = 1}
 
-lazy_element ::= "expr" '!' '(' lazy_element_content ')' { pin = 2}
 
 lazy_element_content ::= << parseLazyElementContent >>
 
