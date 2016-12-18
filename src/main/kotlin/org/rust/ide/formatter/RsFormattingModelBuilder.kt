@@ -12,6 +12,9 @@ import org.rust.ide.formatter.blocks.RsMultilineStringLiteralBlock
 import org.rust.lang.core.psi.RS_RAW_LITERALS
 import org.rust.lang.core.psi.RS_STRING_LITERALS
 import org.rust.lang.core.psi.RsElementTypes.MACRO_ARG
+import org.rust.ide.formatter.blocks.RustFmtBlock
+import org.rust.ide.formatter.blocks.RustMacroArgFmtBlock
+import org.rust.lang.core.psi.RustCompositeElementTypes.*
 
 class RsFormattingModelBuilder : FormattingModelBuilder {
     override fun getRangeAffectingIndent(file: PsiFile?, offset: Int, elementAtOffset: ASTNode?): TextRange? = null
@@ -23,12 +26,13 @@ class RsFormattingModelBuilder : FormattingModelBuilder {
         return FormattingModelProvider.createFormattingModelForPsiFile(element.containingFile, block, settings)
     }
 
-    companion object {
+   /* companion object {
         fun createBlock(
             node: ASTNode,
             alignment: Alignment?,
             indent: Indent?,
             wrap: Wrap?,
+
             ctx: RsFmtContext
         ): ASTBlock {
             val type = node.elementType
@@ -42,6 +46,10 @@ class RsFormattingModelBuilder : FormattingModelBuilder {
             }
 
             return RsFmtBlock(node, alignment, indent, wrap, ctx)
-        }
-    }
+            ctx: RustFmtContext
+        ): ASTBlock = when (node.elementType) {
+            MACRO_ARG -> RustMacroArgFmtBlock(node, alignment, indent, wrap, ctx)
+            MACRO_DEFINITION_ARG -> RustMacroArgFmtBlock(node, alignment, indent, wrap, ctx)
+            else -> RustFmtBlock(node, alignment, indent, wrap, ctx) }
+    } */
 }

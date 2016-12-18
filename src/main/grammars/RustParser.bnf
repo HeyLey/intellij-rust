@@ -922,8 +922,16 @@ private BuildInMacro ::= TryMacro
 
 lazy_element ::= macro_invocation '(' lazy_element_content ')' | macro_invocation '{' lazy_element_content '}' { pin = 1}
 
-
 lazy_element_content ::= << parseLazyElementContent >>
+
+macro_definition_arg ::= <<macro_args_delim (macro_definition_pattern ';'?)* >>
+simple_macro_pattern ::= '(' '$' IDENTIFIER ':' simple_macro_pattern_type ')'
+simple_macro_pattern_type ::= IDENTIFIER
+macro_definition_pattern ::= (simple_macro_pattern | token_tree) '=>' token_tree
+
+lazy_element ::= macro_invocation lazy_macro_arg { pin = 1}
+
+lazy_macro_arg ::= << parseLazyMacroArg >>
 
 
 private ZzMacroCall ::= BuildInMacro | ExprLikeMacro { pin(".*") = MacroInvocation }
@@ -933,11 +941,18 @@ private ZzMacroItem ::= MacroDefinition | ItemLikeMacro {
 }
 
 // Invocations
-MacroInvocation ::= identifier '!' identifier?
+MacroInvocation ::= identifier '!' identifier? {
+  mixin = "org.rust.lang.core.psi.impl.mixin.RustMacroInvocationElementImplMixin"
+}
 TryMacroInvocation ::= "try" '!'
 VecMacroInvocation ::= "vec" '!'
 LogMacroInvocation ::= ( "trace" | "log" | "warn" | "debug" | "error" | "info" ) '!'
 MacroRulesInvocation ::= "macro_rules" '!'
+
+try_macro_invocation ::= "try" '!'
+vec_macro_invocation ::= "vec" '!'
+log_macro_invocation ::= ( "trace" | "log" | "warn" | "debug" | "error" | "info" ) '!'
+macro_rules_invocation ::= "macro_rules" '!'
 
 // https://doc.rust-lang.org/std/fmt/
 FormatLikeMacroInvocation ::= ( "format"

@@ -173,9 +173,9 @@ object RustParserUtil : GeneratedParserUtilBase() {
     }
 
     @JvmStatic
-    fun parseLazyElementContent(builder: PsiBuilder, level: Int) : Boolean {
+    fun parseLazyMacroArg(builder: PsiBuilder, level: Int) : Boolean {
         val mark = builder.mark()
-        val result = RustParser.token_tree(builder, level)
+        val result = RustParser.macro_arg(builder, level)
         if (result) {
             mark.collapse(RustMacrosElementType.LAZY_ELEMENT_CONTENT)
         } else {
